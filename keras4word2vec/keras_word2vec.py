@@ -98,58 +98,18 @@ class Word2VecInKeras:
                             self.x_2d_np_array[i][index] = 1
                         self.y_2d_np_array[i][word.index] = 1
             train_word_count += len(word_vocabs)
-        #s_file.close()
-
-        """
-        print('\nSaving vocabulary ...')
-        save_filename, file_extension = os.path.splitext(save_text_filename)
-        with gensim.utils.smart_open(save_filename + '.vocab', 'wb') as vout:
-            for word, voc in sorted(iteritems(self.vocab), key=lambda item: -item[1].count):
-                #vout.write(gensim.utils.to_utf8("%s %s\n" % (word, voc.count))) # <--- word2vec vocab format
-                vout.write(gensim.utils.to_utf8("%i\t%s\t%s\n" % (voc.index, word, voc.count)))
-        """
-        #return result
 
 
     def build_keras_model(self, activation='softmax', loss='categorical_crossentropy', optimizer='adam'):
+        #See: http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/
         print('\nBuild keras model ...')
 
-        #TODO: se: http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/
-
-        #input_layer = Input(shape=(self.unique_word_count,), name='input_layer')
-        #pre_hidden = Dense(output_dim=self.unique_word_count, trainable=True, activation='linear', name='pre_hidden', bias=True)(input_layer)
-        #hidden_layer = Dense(output_dim=self.vector_dim, trainable=True, activation='linear', name='hidden_layer', bias=True)(pre_hidden)
-
-
         input_layer = Input(shape=(self.unique_word_count,), name='input_layer')
-
         hidden_layer = Dense(output_dim=self.vector_dim, trainable=True, activation='linear', name='hidden_layer', bias=True)(input_layer)
-
-
-
-        ## Traditinonal softmax
         output_layer = Dense(output_dim=self.unique_word_count, trainable=True, activation=activation, name='output_layer', bias=True)(hidden_layer)
 
-
-        ## ParametricSoftplus, use loss='binary_crossentropy'
-        #pre_out = Dense(output_dim=self.unique_word_count, trainable=True, activation='linear', name='pre_out', bias=True)(hidden_layer)
-        #output_layer = ParametricSoftplus(name='activation')(pre_out)
-
-        ## ELU, use loss='binary_crossentropy'
-        #pre_out = Dense(output_dim=self.unique_word_count, trainable=True, activation='linear', name='pre_out', bias=True)(hidden_layer)
-        #output_layer = ELU(name='activation')(pre_out)
-
-
-        ## SReLU, use loss=?
-        #pre_out = Dense(output_dim=self.unique_word_count, trainable=True, activation='linear', name='pre_out', bias=True)(hidden_layer)
-        #output_layer = SReLU(name='activation')(pre_out)
-
-
-
         self.keras_model = Model(input=[input_layer], output=[output_layer])
-        self.keras_model.compile(loss=loss, optimizer=optimizer)  # <--- seems to work well with softmax
-        #self.keras_model.compile(loss=categorical_crossentropy, optimizer='adam') # <--- seems to work well with softmax
-        #self.keras_model.compile(loss='binary_crossentropy', optimizer='adam') # <--- seems to work well with softmax and ParametricSoftplus
+        self.keras_model.compile(loss=loss, optimizer=optimizer)
 
 
     def train_keras_model(self, batch_size, nb_epoch, verbose=1):
