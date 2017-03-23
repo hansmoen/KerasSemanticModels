@@ -167,7 +167,7 @@ class Word2VecInKeras:
 if __name__ == "__main__":
     """
     ## LOCAL TESTING ###################%%%%%%%%%%%%%%%%%%%%%
-    parser = argparse.ArgumentParser(description='my_keras_word2vec.py')
+    parser = argparse.ArgumentParser(description='keras_word2vec.py')
     parser.add_argument('-input', type=str, help='Text filename for training.', default='data/documents/lorem.txt') #default=None)
     parser.add_argument('-output', type=str, help='Save as word2vec model, using binary format (recommend using filetype .bin).', default='data/models/lorem-test.bin') # required=True)
     parser.add_argument('-dim', type=int, help='Vector dimensionality; default=100.', default=100)
@@ -183,7 +183,7 @@ if __name__ == "__main__":
     ####################################%%%%%%%%%%%%%%%%%%%%%
     """
     ## EVEX RUN ########################%%%%%%%%%%%%%%%%%%%%%
-    parser = argparse.ArgumentParser(description='my_keras_word2vec.py')
+    parser = argparse.ArgumentParser(description='keras_word2vec.py')
     parser.add_argument('-input', type=str, help='Text filename for training.', default=None)
     parser.add_argument('-output', type=str, help='Save as word2vec model, using binary format (recommend using filetype .bin).', required=True)
     parser.add_argument('-dim', type=int, help='Vector dimensionality; default=100.', default=100)
@@ -197,6 +197,7 @@ if __name__ == "__main__":
     parser.add_argument('-batch_size', type=int, help='Batch size; default=32.', default=32)
     parser.add_argument('-epoch', type=int, help='Number of training epochs; default=1.', default=1)
     ####################################%%%%%%%%%%%%%%%%%%%%%
+
     args = parser.parse_args(sys.argv[1:])
 
 
@@ -216,4 +217,68 @@ if __name__ == "__main__":
     wv.save_weights_as_word2vec_model(args.output)
 
     wv.test_query_model(model_filename=args.output, q_word_list=['America', 'American', 'she', 'house', 'face'], topn=10)
+
+
+    """
+    For comparison, Gensim's word2vec trained on the Brown corpora gives:
+    America
+        Latin	0.7896
+        United	0.7523
+        States	0.7522
+        Nations	0.7483
+        Korea	0.7434
+        Asia	0.7404
+        Britain	0.7382
+        South	0.7362
+        Canada	0.7347
+        Germany	0.7256
+
+    American
+        Catholic	0.7461
+        anomalies	0.7217
+        Russian	0.7217
+        Churches	0.6953
+        continent	0.6948
+        today	0.6943
+        history	0.6911
+        city's	0.6895
+        League's	0.6825
+        Republic	0.6809
+
+    she
+        he	0.9029
+        Henrietta	0.8300
+        Ramey	0.8281
+        Juanita	0.8256
+        Ma	0.8233
+        She	0.8201
+        Maude	0.8111
+        she'd	0.8106
+        I	0.8072
+        coldly	0.8032
+
+    house
+        apartment	0.7950
+        parked	0.7913
+        tent	0.7887
+        elevator	0.7821
+        sailed	0.7783
+        kitchen	0.7763
+        squat	0.7761
+        car	0.7760
+        newt	0.7742
+        nursery	0.7723
+
+    face
+        eyes	0.8192
+        voice	0.8082
+        lips	0.8062
+        smile	0.7827
+        hair	0.7798
+        chest	0.7771
+        grin	0.7762
+        throat	0.7730
+        cheeks	0.7692
+        flesh	0.7689
+    """
 
