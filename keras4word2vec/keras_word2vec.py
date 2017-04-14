@@ -152,7 +152,7 @@ class Word2VecInKeras:
     def test_query_model(self, model_filename, q_word_list, topn=10):
         w2v_model = w2v_handler.W2vModel()
         w2v_model.load_w2v_model(fname=model_filename, binary=True)
-        print('\nTesting the model ...')
+        print('\nQuerying the model with some selected words ...')
         for q in q_word_list:
             print('\n' + q)
             if w2v_model.in_vocab(q):
@@ -220,7 +220,7 @@ if __name__ == "__main__":
 
 
     """
-    For comparison, Gensim's word2vec trained on the Brown corpora gives:
+    For comparison, Gensim's word2vec trained on the Brown corpus gives:
     America
         Latin	0.7896
         United	0.7523
